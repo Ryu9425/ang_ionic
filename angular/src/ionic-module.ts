@@ -3,6 +3,7 @@ import { APP_INITIALIZER, ModuleWithProviders, NgModule, NgZone } from '@angular
 import { IonicConfig } from '@ionic/core';
 
 import { appInitialize } from './app-initialize';
+import { MinValidator } from './directives/validators/min';
 import { BooleanValueAccessor } from './directives/control-value-accessors/boolean-value-accessor';
 import { NumericValueAccessor } from './directives/control-value-accessors/numeric-value-accesssor';
 import { RadioValueAccessor } from './directives/control-value-accessors/radio-value-accessor';
@@ -105,6 +106,9 @@ const DECLARATIONS = [
   RadioValueAccessor,
   SelectValueAccessor,
   TextValueAccessor,
+
+  // validators
+  MinValidator,
 
   // navigation
   IonRouterOutlet,

@@ -1,4 +1,5 @@
 // DIRECTIVES
+export { MinValidator } from './directives/validators/min';
 export { BooleanValueAccessor } from './directives/control-value-accessors/boolean-value-accessor';
 export { NumericValueAccessor } from './directives/control-value-accessors/numeric-value-accesssor';
 export { RadioValueAccessor } from './directives/control-value-accessors/radio-value-accessor';

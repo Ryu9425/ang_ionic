@@ -26,6 +26,7 @@ export class NumericValueAccessor extends ValueAccessor {
   }
 
   registerOnChange(fn: (_: number | null) => void) {
+    console.log('test')
     super.registerOnChange(value => {
       fn(value === '' ? null : parseFloat(value));
     });

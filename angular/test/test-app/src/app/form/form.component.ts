@@ -10,6 +10,10 @@ export class FormComponent {
   submitted = 'false';
   profileForm: FormGroup;
   outsideToggle = new FormControl(true);
+  ion?: number;
+  reg?: number;
+  ion2?: string;
+  ion3?: string;
 
   constructor(fb: FormBuilder) {
     this.profileForm = fb.group({
