@@ -1,8 +1,8 @@
-import { join, Path } from '@angular-devkit/core';
+import { join, Path, JsonObject } from '@angular-devkit/core';
 import { apply, chain, mergeWith, move, Rule, SchematicContext, SchematicsException, template, Tree, url } from '@angular-devkit/schematics';
 import { NodePackageInstallTask } from '@angular-devkit/schematics/tasks';
 import { addModuleImportToRootModule } from './../utils/ast';
-import { addArchitectBuilder, addAsset, addStyle, getDefaultAngularAppName, getWorkspace, WorkspaceProject, WorkspaceSchema } from './../utils/config';
+import { addArchitectBuilder, addAsset, addStyle, getDefaultAngularAppName, getWorkspace } from './../utils/config';
 import { addPackageToPackageJson } from './../utils/package';
 import { Schema as IonAddOptions } from './schema';
 
@@ -111,11 +111,11 @@ function installNodeDeps() {
 
 export default function ngAdd(options: IonAddOptions): Rule {
   return (host: Tree) => {
-    const workspace: WorkspaceSchema = getWorkspace(host);
+    const workspace: JsonObject = getWorkspace(host);
     if (!options.project) {
       options.project = getDefaultAngularAppName(workspace);
     }
-    const project: WorkspaceProject = workspace.projects[options.project];
+    const project: JsonObject = workspace.projects[options.project];
     if (project.projectType !== 'application') {
       throw new SchematicsException(
         `Ionic Add requires a project type of "application".`
