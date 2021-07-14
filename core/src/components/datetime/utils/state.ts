@@ -111,7 +111,6 @@ export const getCalendarDayState = (
     disabled,
     isActive,
     isToday,
-    ariaSelected: isActive ? 'true' : null,
     ariaLabel: generateDayAriaLabel(locale, isToday, refParts)
   }
 }

@@ -44,7 +44,7 @@
 :host .calendar-days-of-week {
   @include padding(0px, 10px, 0px, 10px);
 
-  color: $text-color-step-500;
+  color: var(--ion-color-step-500, #757777);
 
   font-size: $datetime-md-calendar-item-font-size;
 

@@ -1276,18 +1276,18 @@ export class Datetime implements ComponentInterface {
           <div class="calendar-month-year">
             <ion-item button detail={false} lines="none" onClick={() => this.toggleMonthAndYearView()}>
               <ion-label>
-                {getMonthAndYear(this.locale, this.workingParts)} <ion-icon icon={this.showMonthAndYear ? expandedIcon : collapsedIcon} lazy={false}></ion-icon>
+                {getMonthAndYear(this.locale, this.workingParts)} <ion-icon aria-hidden="true" icon={this.showMonthAndYear ? expandedIcon : collapsedIcon} lazy={false}></ion-icon>
               </ion-label>
             </ion-item>
           </div>
 
           <div class="calendar-next-prev">
             <ion-buttons>
-              <ion-button onClick={() => this.prevMonth()}>
-                <ion-icon slot="icon-only" icon={chevronBack} lazy={false}></ion-icon>
+              <ion-button aria-label="Previous Month" onClick={() => this.prevMonth()}>
+                <ion-icon aria-hidden="true" slot="icon-only" icon={chevronBack} lazy={false}></ion-icon>
               </ion-button>
-              <ion-button onClick={() => this.nextMonth()}>
-                <ion-icon slot="icon-only" icon={chevronForward} lazy={false}></ion-icon>
+              <ion-button aria-label="Next Month" onClick={() => this.nextMonth()}>
+                <ion-icon aria-hidden="true" slot="icon-only" icon={chevronForward} lazy={false}></ion-icon>
               </ion-button>
             </ion-buttons>
           </div>
@@ -1311,7 +1311,7 @@ export class Datetime implements ComponentInterface {
           {getDaysOfMonth(month, year).map((dateObject, index) => {
             const { day, dayOfWeek } = dateObject;
             const referenceParts = { month, day, year };
-            const { isActive, isToday, ariaLabel, ariaSelected, disabled } = getCalendarDayState(this.locale, referenceParts, this.activeParts, this.todayParts, this.minParts, this.maxParts, this.parsedDayValues);
+            const { isActive, isToday, ariaLabel, disabled } = getCalendarDayState(this.locale, referenceParts, this.activeParts, this.todayParts, this.minParts, this.maxParts, this.parsedDayValues);
 
             return (
               <button
@@ -1328,7 +1328,7 @@ export class Datetime implements ComponentInterface {
                   'calendar-day-active': isActive,
                   'calendar-day-today': isToday
                 }}
-                aria-selected={ariaSelected}
+                aria-hidden={disabled ? 'true' : null}
                 aria-label={ariaLabel}
                 onClick={() => {
                   if (day === null) { return; }
@@ -1405,6 +1405,7 @@ export class Datetime implements ComponentInterface {
               <div
                 class="ion-focusable time-column time-column-hours"
                 aria-label="Hours"
+                aria-valuenow={this.workingParts.hour}
                 role="slider"
                 ref={el => this.timeHourRef = el}
                 tabindex="0"
@@ -1422,6 +1423,7 @@ export class Datetime implements ComponentInterface {
               <div
                 class="ion-focusable time-column time-column-minutes"
                 aria-label="Minutes"
+                aria-valuenow={this.workingParts.minute}
                 role="slider"
                 ref={el => this.timeMinuteRef = el}
                 tabindex="0"
