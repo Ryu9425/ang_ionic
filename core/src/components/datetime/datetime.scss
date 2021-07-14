@@ -120,6 +120,15 @@
   display: flex;
 
   align-items: center;
+
+  /**
+   * Ensure text is on top of any
+   * background (even if it's transparent)
+   * so AXE can determine color contrast
+   * correctly.
+   */
+  z-index: 1;
+  position: relative;
 }
 
 :host .calendar-action-buttons ion-item ion-icon {
@@ -350,6 +359,15 @@
   scroll-snap-align: center;
 
   height: 100%;
+
+  /**
+   * Ensure text is on top of any
+   * background (even if it's transparent)
+   * so AXE can determine color contrast
+   * correctly.
+   */
+  z-index: 1;
+  position: relative;
 }
 
 :host .time-separator {
