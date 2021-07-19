@@ -8,13 +8,20 @@ import { IonRouterOutlet } from '../IonRouterOutlet';
 import { IonTabBar } from './IonTabBar';
 import { IonTabsContext, IonTabsContextState } from './IonTabsContext';
 
-class IonTabsElement extends HTMLElement {
+/**
+ * From https://github.com/vuejs/vue-next/blob/3056e9b3dcb1ab0bd18227c6fa7bf283f98f6ef6/packages/runtime-dom/src/apiCustomElement.ts#L160
+ */
+const BaseClass = (typeof HTMLElement !== 'undefined'
+  ? HTMLElement
+  : class {}) as typeof HTMLElement
+
+class IonTabsElement extends BaseClass {
   constructor() {
     super();
   }
 }
 
-if (window && window.customElements) {
+if (typeof (window as any) !== 'undefined' && window.customElements) {
   const element = customElements.get('ion-tabs');
   if (!element) {
     customElements.define('ion-tabs', IonTabsElement);
