@@ -45,9 +45,6 @@ export class Popover implements ComponentInterface, OverlayInterface {
   private destroyKeyboardInteraction?: () => void;
   private destroyDismissInteraction?: () => void;
 
-  private inline = false;
-  private workingDelegate?: FrameworkDelegate;
-
   private triggerEv?: Event;
   private focusDescendantOnPresent = false;
 
@@ -315,39 +312,6 @@ export class Popover implements ComponentInterface, OverlayInterface {
   }
 
   /**
-   * Determines whether or not an overlay
-   * is being used inline or via a controller/JS
-   * and returns the correct delegate.
-   * By default, subsequent calls to getDelegate
-   * will use a cached version of the delegate.
-   * This is useful for calling dismiss after
-   * present so that the correct delegate is given.
-   */
-  private getDelegate(force = false) {
-    if (this.workingDelegate && !force) {
-      return {
-        delegate: this.workingDelegate,
-        inline: this.inline
-      }
-    }
-
-    /**
-     * If using overlay inline
-     * we potentially need to use the coreDelegate
-     * so that this works in vanilla JS apps.
-     * If a user has already placed the overlay
-     * as a direct descendant of ion-app or
-     * the body, then we can assume that
-     * the overlay is already in the correct place.
-     */
-    const parentEl = this.el.parentNode as HTMLElement | null;
-    const inline = this.inline = parentEl !== null && parentEl.tagName !== 'ION-APP' && parentEl.tagName !== 'BODY';
-    const delegate = this.workingDelegate = (inline) ? this.delegate || this.coreDelegate : this.delegate
-
-    return { inline, delegate }
-  }
-
-  /**
    * Present the popover overlay after it has been created.
    */
   @Method()
@@ -373,8 +337,8 @@ export class Popover implements ComponentInterface, OverlayInterface {
       popover: this.el
     };
 
-    const { inline, delegate } = this.getDelegate(true);
-    this.usersElement = await attachComponent(delegate, this.el, this.component, ['popover-viewport'], data, inline);
+    const delegate = this.delegate || this.coreDelegate;
+    this.usersElement = await attachComponent(delegate, this.el, this.component, ['popover-viewport'], data);
     await deepReady(this.usersElement);
 
     this.configureKeyboardInteraction();
@@ -448,7 +412,7 @@ export class Popover implements ComponentInterface, OverlayInterface {
        * we potentially need to use the coreDelegate
        * so that this works in vanilla JS apps
        */
-      const { delegate } = this.getDelegate();
+      const delegate = this.delegate || this.coreDelegate;
       await detachComponent(delegate, this.usersElement);
     }
 

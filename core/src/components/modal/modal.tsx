@@ -39,9 +39,6 @@ export class Modal implements ComponentInterface, OverlayInterface {
   private currentTransition?: Promise<any>;
   private destroyTriggerInteraction?: () => void;
 
-  private inline = false;
-  private workingDelegate?: FrameworkDelegate;
-
   // Reference to the user's provided modal content
   private usersElement?: HTMLElement;
 
@@ -232,8 +229,8 @@ export class Modal implements ComponentInterface, OverlayInterface {
       destroyTriggerInteraction();
     }
 
-    const triggerEl = (trigger !== undefined) ? document.getElementById(trigger) : null;
-    if (!triggerEl) { return; }
+    const triggerRef = (trigger !== undefined) ? document.getElementById(trigger) : null;
+    if (!triggerRef) { return; }
 
     const configureTriggerInteraction = (triggerEl: HTMLElement, modalEl: HTMLIonModalElement) => {
       const openModal = () => {
@@ -246,40 +243,7 @@ export class Modal implements ComponentInterface, OverlayInterface {
       }
     }
 
-    this.destroyTriggerInteraction = configureTriggerInteraction(triggerEl, el);
-  }
-
-  /**
-   * Determines whether or not an overlay
-   * is being used inline or via a controller/JS
-   * and returns the correct delegate.
-   * By default, subsequent calls to getDelegate
-   * will use a cached version of the delegate.
-   * This is useful for calling dismiss after
-   * present so that the correct delegate is given.
-   */
-  private getDelegate(force = false) {
-    if (this.workingDelegate && !force) {
-      return {
-        delegate: this.workingDelegate,
-        inline: this.inline
-      }
-    }
-
-    /**
-     * If using overlay inline
-     * we potentially need to use the coreDelegate
-     * so that this works in vanilla JS apps.
-     * If a user has already placed the overlay
-     * as a direct descendant of ion-app or
-     * the body, then we can assume that
-     * the overlay is already in the correct place.
-     */
-    const parentEl = this.el.parentNode as HTMLElement | null;
-    const inline = this.inline = parentEl !== null && parentEl.tagName !== 'ION-APP' && parentEl.tagName !== 'BODY';
-    const delegate = this.workingDelegate = (inline) ? this.delegate || this.coreDelegate : this.delegate
-
-    return { inline, delegate }
+    this.destroyTriggerInteraction = configureTriggerInteraction(triggerRef, el);
   }
 
   /**
@@ -308,8 +272,8 @@ export class Modal implements ComponentInterface, OverlayInterface {
       modal: this.el
     };
 
-    const { inline, delegate } = this.getDelegate(true);
-    this.usersElement = await attachComponent(delegate, this.el, this.component, ['ion-page'], data, inline);
+    const delegate = this.delegate || this.coreDelegate;
+    this.usersElement = await attachComponent(delegate, this.el, this.component, ['ion-page'], data);
 
     await deepReady(this.usersElement);
 
@@ -389,7 +353,7 @@ export class Modal implements ComponentInterface, OverlayInterface {
     const dismissed = await this.currentTransition;
 
     if (dismissed) {
-      const { delegate } = this.getDelegate();
+      const delegate = this.delegate || this.coreDelegate;
       await detachComponent(delegate, this.usersElement);
       if (this.animation) {
         this.animation.destroy();

@@ -7,13 +7,12 @@ export const attachComponent = async (
   container: Element,
   component?: ComponentRef,
   cssClasses?: string[],
-  componentProps?: { [key: string]: any },
-  inline?: boolean
+  componentProps?: { [key: string]: any }
 ): Promise<HTMLElement> => {
   if (delegate) {
     return delegate.attachViewToDom(container, component, componentProps, cssClasses);
   }
-  if (!inline && typeof component !== 'string' && !(component instanceof HTMLElement)) {
+  if (typeof component !== 'string' && !(component instanceof HTMLElement)) {
     throw new Error('framework delegate is missing');
   }
 
@@ -56,6 +55,7 @@ export const CoreDelegate = () => {
     cssClasses: string[] = []
   ) => {
     BaseComponent = parentElement;
+    let UserEl: any;
     /**
      * If passing in a component via the `component` props
      * we need to append it inside of our overlay component.
@@ -66,7 +66,7 @@ export const CoreDelegate = () => {
        * the element otherwise just get a reference
        * to the component.
        */
-      const el: any = (typeof userComponent === 'string')
+      UserEl = (typeof userComponent === 'string')
         ? BaseComponent.ownerDocument && BaseComponent.ownerDocument.createElement(userComponent)
         : userComponent;
 
@@ -74,40 +74,47 @@ export const CoreDelegate = () => {
        * Add any css classes passed in
        * via the cssClasses prop on the overlay.
        */
-      cssClasses.forEach(c => el.classList.add(c));
+      cssClasses.forEach(c => UserEl.classList.add(c));
 
       /**
        * Add any props passed in
        * via the componentProps prop on the overlay.
        */
-      Object.assign(el, userComponentProps);
+      Object.assign(UserEl, userComponentProps);
 
       /**
        * Finally, append the component
        * inside of the overlay component.
        */
-      BaseComponent.appendChild(el);
+      BaseComponent.appendChild(UserEl);
 
-      await new Promise(resolve => componentOnReady(el, resolve));
+      await new Promise(resolve => componentOnReady(UserEl, resolve));
     }
 
     /**
-     * Get the root of the app and
-     * add the overlay there.
+     * If modal is already a direct descendant of
+     * ion-app or body, then no teleport is needed.
      */
-    const app = document.querySelector('ion-app') || document.body;
+    const parentEl = BaseComponent.parentNode;
+    if (parentEl === null || (parentEl.tagName !== 'ION-APP' && parentEl.tagName !== 'BODY')) {
+      /**
+       * Get the root of the app and
+       * add the overlay there.
+       */
+      const app = document.querySelector('ion-app') || document.body;
 
-    /**
-     * Create a placeholder comment so that
-     * we can return this component to where
-     * it was previously.
-     */
-    Reference = document.createComment('ionic teleport');
-    BaseComponent.parentNode.insertBefore(Reference, BaseComponent);
+      /**
+       * Create a placeholder comment so that
+       * we can return this component to where
+       * it was previously.
+       */
+      Reference = document.createComment('ionic teleport');
+      BaseComponent.parentNode.insertBefore(Reference, BaseComponent);
 
-    app.appendChild(BaseComponent);
+      app.appendChild(BaseComponent);
+    }
 
-    return BaseComponent;
+    return UserEl || BaseComponent;
   }
 
   const removeViewFromDom = () => {
