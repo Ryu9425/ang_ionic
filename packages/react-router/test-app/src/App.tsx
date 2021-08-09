@@ -28,6 +28,7 @@ import MultipleTabs from './pages/muiltiple-tabs/MultipleTabs';
 import DynamicTabs from './pages/dynamic-tabs/DynamicTabs';
 import NestedOutlet from './pages/nested-outlet/NestedOutlet';
 import NestedOutlet2 from './pages/nested-outlet/NestedOutlet2';
+import NestedOutlet3 from './pages/nested-outlet/NestedOutlet3';
 import ReplaceAction from './pages/replace-action/Replace';
 import TabsContext from './pages/tab-context/TabContext';
 import { OutletRef } from './pages/outlet-ref/OutletRef';
@@ -36,7 +37,7 @@ import Refs from './pages/refs/Refs';
 import DynamicIonpageClassnames from './pages/dynamic-ionpage-classnames/DynamicIonpageClassnames';
 import Tabs from './pages/tabs/Tabs';
 import TabsSecondary from './pages/tabs/TabsSecondary';
-debugger;
+
 const App: React.FC = () => {
   return (
     <IonApp>
@@ -48,6 +49,7 @@ const App: React.FC = () => {
         <Route path="/dynamic-tabs" component={DynamicTabs} />
         <Route path="/nested-outlet" component={NestedOutlet} />
         <Route path="/nested-outlet2" component={NestedOutlet2} />
+        <Route path="/nested-outlet3" component={NestedOutlet3} />
         <Route path="/replace-action" component={ReplaceAction} />
         <Route path="/tab-context" component={TabsContext} />
         <Route path="/outlet-ref" component={OutletRef} />

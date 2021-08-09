@@ -127,3 +127,15 @@ Cypress.Commands.add('ionMenuClick', () => {
 Cypress.Commands.add('ionHardwareBackEvent', () => {
   cy.document().trigger('backbutton');
 });
+
+Cypress.Commands.add('routerPush', (path) => {
+  cy.window().then(win => {
+    win.debugRouter.push(path);
+  });
+});
+
+Cypress.Commands.add('routerGo', (n) => {
+  cy.window().then(win => {
+    win.debugRouter.go(n);
+  });
+});

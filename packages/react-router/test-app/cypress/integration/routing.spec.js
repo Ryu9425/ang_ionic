@@ -310,6 +310,117 @@ describe('Routing Tests', () => {
     cy.ionPageDoesNotExist('home-details-page-1');
     cy.ionPageVisible('home-page');
   });
+
+  it.only('should select correct view when using router.go()', () => {
+    cy.visit(`http://localhost:${port}`);
+
+    cy.routerPush('/nested-outlet3/home');
+    cy.ionPageVisible('home');
+
+    cy.routerPush('/nested-outlet3/list');
+    cy.ionPageVisible('list');
+    cy.ionPageHidden('home');
+
+    cy.routerPush('/nested-outlet3/list/1');
+    cy.ionPageVisible('item');
+    cy.ionPageHidden('list');
+
+    cy.routerGo(-2);
+    cy.ionPageVisible('home');
+    cy.ionPageDoesNotExist('item');
+
+    cy.routerGo(2);
+    cy.ionPageVisible('item');
+
+    cy.ionBackClick('item');
+    cy.ionPageDoesNotExist('item');
+    cy.ionPageVisible('list');
+  });
+
+  /*it.only('should select correct view when traversing backward and forward through history', () => {
+    cy.visit(`http://localhost:${port}`);
+
+    cy.routerPush('/routing');
+    cy.ionPageVisible('routing');
+    cy.ionPageHidden('home');
+
+    cy.routerPush('/routing/abc');
+    cy.ionPageVisible('routingparameter');
+    cy.ionPageHidden('routing');
+
+    cy.routerGo(-2);
+    cy.ionPageVisible('home');
+    cy.ionPageDoesNotExist('routingparameter');
+
+    cy.routerGo(1);
+    cy.ionPageHidden('home');
+    cy.ionPageVisible('routing');
+
+    cy.routerGo(1);
+    cy.ionPageHidden('routing');
+    cy.ionPageVisible('routingparameter');
+
+    cy.routerGo(-1);
+    cy.ionPageDoesNotExist('routingparameter');
+    cy.ionPageVisible('routing');
+
+    cy.routerGo(-1);
+    cy.ionPageDoesNotExist('routing');
+    cy.ionPageVisible('home');
+  })
+
+  it.only('should create new stack items when going back then pushing pages', () => {
+    cy.visit(`http://localhost:${port}`);
+
+    cy.routerPush('/routing');
+    cy.ionPageVisible('routing');
+    cy.ionPageHidden('home');
+
+    cy.routerPush('/routing/abc');
+    cy.ionPageVisible('routingparameter');
+    cy.ionPageHidden('routing');
+
+    cy.routerGo(-2);
+    cy.ionPageVisible('home');
+    cy.ionPageDoesNotExist('routingparameter');
+
+    cy.routerPush('/inputs');
+    cy.ionPageHidden('home');
+    cy.ionPageVisible('inputs');
+
+    cy.ionBackClick('inputs');
+    cy.ionPageVisible('home');
+    cy.ionPageDoesNotExist('inputs');
+  })
+
+  it.only('should properly go back using ion-back-button after using router.go()', () => {
+    cy.visit(`http://localhost:${port}`);
+
+    cy.routerPush('/routing-single/home');
+    cy.ionPageVisible('dynamic-routes-home');
+
+    cy.get('[data-pageid="dynamic-routes-home"] button').click();
+
+    cy.routerPush('/dynamic-routers/newRoute');
+    cy.ionPageVisible('dynamic-routes-newroute');
+    cy.ionPageHidden('dynamic-routes-home');
+
+    cy.routerGo(-2);
+    cy.ionPageVisible('main');
+    cy.ionPageDoesNotExist('dynamic-routes-home');
+
+    cy.routerGo(2);
+    cy.ionPageVisible('routingparameter');
+    cy.ionPageHidden('home');
+
+    cy.ionBackClick('routingparameter');
+    cy.ionPageDoesNotExist('routingparameter');
+    cy.ionPageVisible('routing');
+
+    cy.ionBackClick('routing');
+    cy.ionPageDoesNotExist('routing');
+    cy.ionPageVisible('home');
+  });*/
   /*
     Tests to add:
     Test that lifecycle events fire

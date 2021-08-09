@@ -9,12 +9,16 @@ import {
   IonItem,
   IonLabel,
 } from '@ionic/react';
+import { useHistory } from 'react-router-dom';
 
 interface MainProps {}
 
 const Main: React.FC<MainProps> = () => {
+  const history = useHistory();
+  (window as any).debugRouter = history;
+
   return (
-    <IonPage>
+    <IonPage data-pageid="main">
       <IonHeader>
         <IonToolbar>
           <IonTitle>Main</IonTitle>
@@ -39,6 +43,9 @@ const Main: React.FC<MainProps> = () => {
           </IonItem>
           <IonItem routerLink="/nested-outlet2">
             <IonLabel>Nested Outlet 2</IonLabel>
+          </IonItem>
+          <IonItem routerLink="/nested-outlet3">
+            <IonLabel>Nested Outlet 3</IonLabel>
           </IonItem>
           <IonItem routerLink="/replace-action">
             <IonLabel>Replace Action</IonLabel>
