@@ -73,9 +73,10 @@ export class Header implements ComponentInterface {
 
       // Cloned elements are always needed in iOS transition
       writeTask(() => {
-        const title = cloneElement('ion-title') as HTMLIonTitleElement;
+        const app = this.el.closest('ion-app');
+        const title = cloneElement('ion-title', app) as HTMLIonTitleElement;
         title.size = 'large';
-        cloneElement('ion-back-button');
+        cloneElement('ion-back-button', app);
       });
 
       await this.setupCollapsibleHeader(contentEl, pageEl);

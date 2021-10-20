@@ -17,14 +17,16 @@ interface ToolbarIndex {
   ionButtonsEl: HTMLElement[] | [];
 }
 
-export const cloneElement = (tagName: string) => {
+export const cloneElement = (tagName: string, rootEl: HTMLElement | null) => {
   const getCachedEl = document.querySelector(`${tagName}.ion-cloned-element`);
   if (getCachedEl !== null) { return getCachedEl; }
 
   const clonedEl = document.createElement(tagName);
   clonedEl.classList.add('ion-cloned-element');
   clonedEl.style.setProperty('display', 'none');
-  document.body.appendChild(clonedEl);
+
+  const root = rootEl === null ? document.body : rootEl;
+  root.appendChild(clonedEl);
 
   return clonedEl;
 };
