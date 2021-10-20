@@ -25,6 +25,14 @@ export const cloneElement = (tagName: string, rootEl: HTMLElement | null) => {
   clonedEl.classList.add('ion-cloned-element');
   clonedEl.style.setProperty('display', 'none');
 
+  /**
+   * Adding Stencil components outside of the root
+   * application node can cause the appload event
+   * to be fired multiple times, so we should
+   * seek to add these cloned elements
+   * to ion-app first and fall back to the
+   * body if no ion-app component is used.
+   */
   const root = rootEl === null ? document.body : rootEl;
   root.appendChild(clonedEl);
 
