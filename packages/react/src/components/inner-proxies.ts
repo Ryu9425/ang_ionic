@@ -1,5 +1,5 @@
 import { JSX } from '@ionic/core/components';
-import { defineIonApp as defineIonApp } from '@ionic/core/components/ion-app.js';
+import { defineCustomElement as defineIonApp } from '@ionic/core/components/ion-app.js';
 import { defineCustomElement as defineIonBackButton } from '@ionic/core/components/ion-back-button.js';
 import { defineCustomElement as defineIonRouterOutlet } from '@ionic/core/components/ion-router-outlet.js';
 import { defineCustomElement as defineIonTabBar } from '@ionic/core/components/ion-tab-bar.js';
