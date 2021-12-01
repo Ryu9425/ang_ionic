@@ -1,5 +1,5 @@
 import { JSX } from '@ionic/core/components';
-import { IonApp as IonAppCmp } from '@ionic/core/components/ion-app.js';
+import { defineIonApp as defineIonApp } from '@ionic/core/components/ion-app.js';
 import { defineCustomElement as defineIonBackButton } from '@ionic/core/components/ion-back-button.js';
 import { defineCustomElement as defineIonRouterOutlet } from '@ionic/core/components/ion-router-outlet.js';
 import { defineCustomElement as defineIonTabBar } from '@ionic/core/components/ion-tab-bar.js';
@@ -12,7 +12,7 @@ import { /*@__PURE__*/ createReactComponent } from './react-component-lib';
 export const IonTabButtonInner = /*@__PURE__*/ createReactComponent<
   JSX.IonTabButton & { onIonTabButtonClick?: (e: CustomEvent) => void },
   HTMLIonTabButtonElement
->('ion-tab-button', undefined, undefined, defineIonButton);
+>('ion-tab-button', undefined, undefined, defineIonTabButton);
 export const IonTabBarInner = /*@__PURE__*/ createReactComponent<
   JSX.IonTabBar,
   HTMLIonTabBarElement
