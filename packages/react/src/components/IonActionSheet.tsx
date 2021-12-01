@@ -3,7 +3,7 @@ import {
   ActionSheetOptions as ActionSheetOptionsCore,
   actionSheetController as actionSheetControllerCore,
 } from '@ionic/core/components';
-import { IonActionSheet as IonActionSheetCmp } from '@ionic/core/components/ion-action-sheet.js';
+import { defineCustomElement as defineIonActionSheet } from '@ionic/core/components/ion-action-sheet.js';
 
 import { createOverlayComponent } from './createOverlayComponent';
 
@@ -30,4 +30,4 @@ const actionSheetController = {
 export const IonActionSheet = /*@__PURE__*/ createOverlayComponent<
   ActionSheetOptions,
   HTMLIonActionSheetElement
->('ion-action-sheet', actionSheetController, IonActionSheetCmp);
+>('ion-action-sheet', actionSheetController, defineIonActionSheet);

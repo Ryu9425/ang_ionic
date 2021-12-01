@@ -9,7 +9,6 @@ import {
   attachProps,
   camelToDashCase,
   dashToPascalCase,
-  defineCustomElement,
   isCoveredByReact,
   mergeRefs,
 } from './react-component-lib/utils';
@@ -27,9 +26,11 @@ interface IonicReactInternalProps<ElementType> extends React.HTMLAttributes<Elem
 
 export const createRoutingComponent = <PropType, ElementType>(
   tagName: string,
-  customElement?: any
+  defineCustomElement?: any
 ) => {
-  defineCustomElement(tagName, customElement);
+  if (defineCustomElement !== undefined) {
+    defineCustomElement();
+  }
 
   const displayName = dashToPascalCase(tagName);
   const ReactComponent = class extends React.Component<IonicReactInternalProps<PropType>> {

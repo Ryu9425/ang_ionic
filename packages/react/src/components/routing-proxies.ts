@@ -1,10 +1,10 @@
 import type { JSX } from '@ionic/core/components';
-import { IonButton as IonButtonCmp } from '@ionic/core/components/ion-button.js';
-import { IonCard as IonCardCmp } from '@ionic/core/components/ion-card.js';
-import { IonFabButton as IonFabButtonCmp } from '@ionic/core/components/ion-fab-button.js';
-import { IonItemOption as IonItemOptionCmp } from '@ionic/core/components/ion-item-option.js';
-import { IonItem as IonItemCmp } from '@ionic/core/components/ion-item.js';
-import { IonRouterLink as IonRouterLinkCmp } from '@ionic/core/components/ion-router-link.js';
+import { defineCustomElement as defineIonButton } from '@ionic/core/components/ion-button.js';
+import { defineCustomElement as defineIonCard } from '@ionic/core/components/ion-card.js';
+import { defineCustomElement as defineIonFabButton } from '@ionic/core/components/ion-fab-button.js';
+import { defineCustomElement as defineIonItemOption } from '@ionic/core/components/ion-item-option.js';
+import { defineCustomElement as defineIonItem } from '@ionic/core/components/ion-item.js';
+import { defineCustomElement as defineIonRouterLink } from '@ionic/core/components/ion-router-link.js';
 
 import { createRoutingComponent } from './createRoutingComponent';
 import { HrefProps } from './hrefprops';
@@ -12,29 +12,29 @@ import { HrefProps } from './hrefprops';
 export const IonRouterLink = /*@__PURE__*/ createRoutingComponent<
   HrefProps<JSX.IonRouterLink>,
   HTMLIonRouterLinkElement
->('ion-router-link', IonRouterLinkCmp);
+>('ion-router-link', defineIonRouterLink);
 
 export const IonButton = /*@__PURE__*/ createRoutingComponent<
   HrefProps<JSX.IonButton>,
   HTMLIonButtonElement
->('ion-button', IonButtonCmp);
+>('ion-button', defineIonButton);
 
 export const IonCard = /*@__PURE__*/ createRoutingComponent<
   HrefProps<JSX.IonCard>,
   HTMLIonCardElement
->('ion-card', IonCardCmp);
+>('ion-card', defineIonCard);
 
 export const IonFabButton = /*@__PURE__*/ createRoutingComponent<
   HrefProps<JSX.IonFabButton>,
   HTMLIonFabButtonElement
->('ion-fab-button', IonFabButtonCmp);
+>('ion-fab-button', defineIonFabButton);
 
 export const IonItem = /*@__PURE__*/ createRoutingComponent<
   HrefProps<JSX.IonItem>,
   HTMLIonItemElement
->('ion-item', IonItemCmp);
+>('ion-item', defineIonItem);
 
 export const IonItemOption = /*@__PURE__*/ createRoutingComponent<
   HrefProps<JSX.IonItemOption>,
   HTMLIonItemOptionElement
->('ion-item-option', IonItemOptionCmp);
+>('ion-item-option', defineIonItemOption);
