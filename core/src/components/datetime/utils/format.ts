@@ -103,3 +103,16 @@ export const getMonthAndYear = (locale: string, refParts: DatetimeParts) => {
   const date = new Date(`${refParts.month}/${refParts.day}/${refParts.year} GMT+0000`);
   return new Intl.DateTimeFormat(locale, { month: 'long', year: 'numeric', timeZone: 'UTC' }).format(date);
 };
+
+/**
+ * Given a locale and a date object,
+ * return a formatted string that includes
+ * the short month, numeric day, and full year.
+ * Example: Apr 22, 2021
+ */
+export const getMonthDayAndYear = (locale: string, refParts: DatetimeParts) => {
+  const date = new Date(`${refParts.month}/${refParts.day}/${refParts.year} GMT+0000`);
+  return new Intl.DateTimeFormat(locale, { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' }).format(
+    date
+  );
+};
