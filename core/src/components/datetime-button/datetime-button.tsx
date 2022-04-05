@@ -63,22 +63,27 @@ export class DatetimeButton implements ComponentInterface {
       return;
     }
 
+    /**
+     * If the datetime is in a modal or
+     * a popover we should listen for the
+     * present/dismiss events so that the tapped
+     * button can be correctly highlighted/activated.
+     */
     const overlayEl = datetimeEl.closest('ion-modal, ion-popover');
+    if (overlayEl) {
+      addEventListener(overlayEl, 'willPresent', () => {
+        this.datetimeActive = true;
+      });
+      addEventListener(overlayEl, 'willDismiss', () => {
+        this.datetimeActive = false;
+      });
+    }
 
     componentOnReady(datetimeEl, () => {
       this.datetimePresentation = datetimeEl.presentation;
 
       this.setDateTimeText();
       addEventListener(datetimeEl, 'ionChange', this.setDateTimeText);
-
-      if (overlayEl) {
-        addEventListener(overlayEl, 'willPresent', () => {
-          this.datetimeActive = true;
-        });
-        addEventListener(overlayEl, 'willDismiss', () => {
-          this.datetimeActive = false;
-        });
-      }
     });
   }
 
@@ -142,6 +147,13 @@ export class DatetimeButton implements ComponentInterface {
         break;
     }
 
+    /**
+     * Track which button was clicked
+     * so that it can have the correct
+     * activated styles applied when
+     * the modal/popover containing
+     * the datetime is opened.
+     */
     this.selectedButton = 'date';
   };
 
@@ -168,6 +180,13 @@ export class DatetimeButton implements ComponentInterface {
         break;
     }
 
+    /**
+     * Track which button was clicked
+     * so that it can have the correct
+     * activated styles applied when
+     * the modal/popover containing
+     * the datetime is opened.
+     */
     this.selectedButton = 'time';
   };
 
