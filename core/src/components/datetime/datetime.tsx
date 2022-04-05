@@ -4,7 +4,14 @@ import { printIonError } from '@utils/logging';
 import { caretDownSharp, caretUpSharp, chevronBack, chevronDown, chevronForward } from 'ionicons/icons';
 
 import { getIonMode } from '../../global/ionic-global';
-import type { Color, DatetimePresentation, DatetimeChangeEventDetail, DatetimeParts, Mode, StyleEventDetail } from '../../interface';
+import type {
+  Color,
+  DatetimePresentation,
+  DatetimeChangeEventDetail,
+  DatetimeParts,
+  Mode,
+  StyleEventDetail,
+} from '../../interface';
 import { startFocusVisible } from '../../utils/focus-visible';
 import { getElementRoot, raf, renderHiddenInput } from '../../utils/helpers';
 import { isRTL } from '../../utils/rtl';

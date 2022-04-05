@@ -4,12 +4,11 @@ import { componentOnReady, addEventListener } from '@utils/helpers';
 import { printIonError } from '@utils/logging';
 import { createColorClasses } from '@utils/theme';
 
+import { getIonMode } from '../../global/ionic-global';
 import type { Color, DatetimePresentation } from '../../interface';
 import { getFormattedTime, getMonthAndYear, getMonthDayAndYear, getLocalizedDateTime } from '../datetime/utils/format';
 import { is24Hour } from '../datetime/utils/helpers';
 import { parseDate } from '../datetime/utils/parse';
-
-import { getIonMode } from '../../global/ionic-global';
 
 /**
  * @virtualProp {"ios" | "md"} mode - The mode determines which platform styles to use.
@@ -160,7 +159,7 @@ export class DatetimeButton implements ComponentInterface {
      * that display content other than a time picker,
      * we need to update the presentation style.
      */
-    switch(datetimePresentation) {
+    switch (datetimePresentation) {
       case 'date-time':
       case 'time-date':
         datetimeEl.presentation = 'time';
@@ -174,7 +173,9 @@ export class DatetimeButton implements ComponentInterface {
 
   render() {
     const { color, dateText, timeText, datetimePresentation, selectedButton, datetimeActive } = this;
-    const showDateTarget = !datetimePresentation || ['date-time', 'time-date', 'date', 'month', 'year', 'month-year'].includes(datetimePresentation);
+    const showDateTarget =
+      !datetimePresentation ||
+      ['date-time', 'time-date', 'date', 'month', 'year', 'month-year'].includes(datetimePresentation);
     const showTimeTarget = !datetimePresentation || ['date-time', 'time-date', 'time'].includes(datetimePresentation);
     const mode = getIonMode(this);
 
@@ -182,20 +183,28 @@ export class DatetimeButton implements ComponentInterface {
       <Host
         class={createColorClasses(color, {
           [mode]: true,
-          [`${selectedButton}-active`]: datetimeActive
+          [`${selectedButton}-active`]: datetimeActive,
         })}
       >
-        { showDateTarget && <div class="date-target-container" onClick={() => this.handleDateClick()}>
-          <slot name="date-target">
-            <button id="date-button" aria-expanded="false">{dateText}</button>
-          </slot>
-        </div> }
+        {showDateTarget && (
+          <div class="date-target-container" onClick={() => this.handleDateClick()}>
+            <slot name="date-target">
+              <button id="date-button" aria-expanded="false">
+                {dateText}
+              </button>
+            </slot>
+          </div>
+        )}
 
-        { showTimeTarget && <div class="time-target-container" onClick={() => this.handleTimeClick()}>
-          <slot name="time-target">
-            <button id="time-button" aria-expanded="false">{timeText}</button>
-          </slot>
-        </div> }
+        {showTimeTarget && (
+          <div class="time-target-container" onClick={() => this.handleTimeClick()}>
+            <slot name="time-target">
+              <button id="time-button" aria-expanded="false">
+                {timeText}
+              </button>
+            </slot>
+          </div>
+        )}
       </Host>
     );
   }

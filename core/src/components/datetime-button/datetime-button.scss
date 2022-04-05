@@ -16,6 +16,8 @@
   @include padding(6px, 12px, 6px, 12px);
   @include margin(0px, 2px, 0px, 2px);
 
+  transition: 150ms color ease-in-out;
+
   border: none;
 
   background: var(--ion-color-step-300, #edeef0);
@@ -28,8 +30,6 @@
   cursor: pointer;
 
   appearance: none;
-
-  transition: 150ms color ease-in-out;
 }
 
 :host(.time-active) #time-button,

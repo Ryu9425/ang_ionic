@@ -106,10 +106,12 @@ export const getMonthDayAndYear = (locale: string, refParts: DatetimeParts) => {
  * with Intl.DateTimeFormat. It is preferred to use this function than
  * Intl.DateTimeFormat directly when calling the `format` method.
  */
-export const getLocalizedDateTime = (locale: string, refParts: DatetimeParts, options: Intl.DateTimeFormatOptions): string => {
-  const timeString = (!!refParts.hour && !!refParts.minute) ? `${refParts.hour}:${refParts.minute}` : '';
+export const getLocalizedDateTime = (
+  locale: string,
+  refParts: DatetimeParts,
+  options: Intl.DateTimeFormatOptions
+): string => {
+  const timeString = !!refParts.hour && !!refParts.minute ? `${refParts.hour}:${refParts.minute}` : '';
   const date = new Date(`${refParts.month}/${refParts.day}/${refParts.year} ${timeString} GMT+0000`);
-  return new Intl.DateTimeFormat(locale, { ...options, timeZone: 'UTC' }).format(
-    date
-  );
-}
+  return new Intl.DateTimeFormat(locale, { ...options, timeZone: 'UTC' }).format(date);
+};

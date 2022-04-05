@@ -30,7 +30,12 @@
         </ion-item>
 
         <ion-popover arrow="false" trigger="default-button">
-          <ion-datetime locale="en-US" presentation="date-time" id="default-datetime" value="2022-03-15T00:43:00"></ion-datetime>
+          <ion-datetime
+            locale="en-US"
+            presentation="date-time"
+            id="default-datetime"
+            value="2022-03-15T00:43:00"
+          ></ion-datetime>
         </ion-popover>
       </ion-content>
 
@@ -38,7 +43,9 @@
         const datetime = document.querySelector('ion-datetime');
         const input = document.querySelector('ion-input');
         datetime.addEventListener('ionChange', (ev) => {
-          input.value = new Intl.DateTimeFormat('en-US', { dateStyle: 'long', timeStyle: 'short' }).format(new Date(ev.detail.value))
+          input.value = new Intl.DateTimeFormat('en-US', { dateStyle: 'long', timeStyle: 'short' }).format(
+            new Date(ev.detail.value)
+          );
         });
       </script>
     </ion-app>
