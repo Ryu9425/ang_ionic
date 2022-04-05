@@ -1,12 +1,15 @@
 import type { ComponentInterface } from '@stencil/core';
 import { Component, Host, Prop, State, h } from '@stencil/core';
-import { componentOnReady } from '@utils/helpers';
+import { componentOnReady, addEventListener } from '@utils/helpers';
 import { printIonError } from '@utils/logging';
+import { createColorClasses } from '@utils/theme';
 
 import type { Color, DatetimePresentation } from '../../interface';
 import { getFormattedTime, getMonthAndYear, getMonthDayAndYear, getLocalizedDateTime } from '../datetime/utils/format';
 import { is24Hour } from '../datetime/utils/helpers';
 import { parseDate } from '../datetime/utils/parse';
+
+import { getIonMode } from '../../global/ionic-global';
 
 /**
  * @virtualProp {"ios" | "md"} mode - The mode determines which platform styles to use.
@@ -21,17 +24,19 @@ import { parseDate } from '../datetime/utils/parse';
 })
 export class DatetimeButton implements ComponentInterface {
   private datetimeEl: HTMLIonDatetimeElement | null = null;
+  private selectedButton?: 'date' | 'time';
 
   @State() datetimePresentation?: DatetimePresentation;
   @State() dateText?: string;
   @State() timeText?: string;
+  @State() datetimeActive = false;
 
   /**
    * The color to use from your application's color palette.
    * Default options are: `"primary"`, `"secondary"`, `"tertiary"`, `"success"`, `"warning"`, `"danger"`, `"light"`, `"medium"`, and `"dark"`.
    * For more information on colors, see [theming](/docs/theming/basics).
    */
-  @Prop({ reflect: true }) color?: Color;
+  @Prop({ reflect: true }) color?: Color = 'primary';
 
   /**
    * If `true`, the user cannot interact with the button.
@@ -59,11 +64,22 @@ export class DatetimeButton implements ComponentInterface {
       return;
     }
 
+    const overlayEl = datetimeEl.closest('ion-modal, ion-popover');
+
     componentOnReady(datetimeEl, () => {
       this.datetimePresentation = datetimeEl.presentation;
 
       this.setDateTimeText();
-      datetimeEl.addEventListener('ionChange', this.setDateTimeText);
+      addEventListener(datetimeEl, 'ionChange', this.setDateTimeText);
+
+      if (overlayEl) {
+        addEventListener(overlayEl, 'willPresent', () => {
+          this.datetimeActive = true;
+        });
+        addEventListener(overlayEl, 'willDismiss', () => {
+          this.datetimeActive = false;
+        });
+      }
     });
   }
 
@@ -126,6 +142,8 @@ export class DatetimeButton implements ComponentInterface {
       default:
         break;
     }
+
+    this.selectedButton = 'date';
   };
 
   private handleTimeClick = () => {
@@ -150,24 +168,32 @@ export class DatetimeButton implements ComponentInterface {
       default:
         break;
     }
+
+    this.selectedButton = 'time';
   };
 
   render() {
-    const { dateText, timeText, datetimePresentation } = this;
+    const { color, dateText, timeText, datetimePresentation, selectedButton, datetimeActive } = this;
     const showDateTarget = !datetimePresentation || ['date-time', 'time-date', 'date', 'month', 'year', 'month-year'].includes(datetimePresentation);
     const showTimeTarget = !datetimePresentation || ['date-time', 'time-date', 'time'].includes(datetimePresentation);
+    const mode = getIonMode(this);
 
     return (
-      <Host>
+      <Host
+        class={createColorClasses(color, {
+          [mode]: true,
+          [`${selectedButton}-active`]: datetimeActive
+        })}
+      >
         { showDateTarget && <div class="date-target-container" onClick={() => this.handleDateClick()}>
           <slot name="date-target">
-            <button aria-expanded="false">{dateText}</button>
+            <button id="date-button" aria-expanded="false">{dateText}</button>
           </slot>
         </div> }
 
         { showTimeTarget && <div class="time-target-container" onClick={() => this.handleTimeClick()}>
           <slot name="time-target">
-            <button aria-expanded="false">{timeText}</button>
+            <button id="time-button" aria-expanded="false">{timeText}</button>
           </slot>
         </div> }
       </Host>
