@@ -44,7 +44,7 @@
             </ion-item>
 
             <ion-popover arrow="false" trigger="default-button">
-              <ion-datetime presentation="date-time" id="default-datetime" value="2022-03-15T00:43:00"></ion-datetime>
+              <ion-datetime locale="en-US" presentation="date-time" id="default-datetime" value="2022-03-15T00:43:00"></ion-datetime>
             </ion-popover>
           </div>
 
@@ -57,7 +57,7 @@
             </ion-item>
 
             <ion-popover arrow="false" trigger="date-button">
-              <ion-datetime presentation="date" id="date-datetime" value="2022-03-15T00:43:00"></ion-datetime>
+              <ion-datetime locale="en-US" presentation="date" id="date-datetime" value="2022-03-15T00:43:00"></ion-datetime>
             </ion-popover>
           </div>
 
@@ -70,7 +70,19 @@
             </ion-item>
 
             <ion-popover arrow="false" trigger="time-button">
-              <ion-datetime presentation="time" id="time-datetime" value="2022-03-15T00:43:00"></ion-datetime>
+              <ion-datetime locale="en-US" presentation="time" id="time-datetime" value="2022-03-15T00:43:00"></ion-datetime>
+            </ion-popover>
+          </div>
+          <div class="grid-item">
+            <h2>Time Only (24 hour)</h2>
+
+            <ion-item>
+              <ion-label>Start Time</ion-label>
+              <ion-datetime-button slot="end" id="time-h23-button" datetime="time-h23-datetime"></ion-datetime-button>
+            </ion-item>
+
+            <ion-popover arrow="false" trigger="time-h23-button">
+              <ion-datetime locale="en-US" presentation="time" id="time-h23-datetime" value="2022-03-15T00:43:00" hour-cycle="h23"></ion-datetime>
             </ion-popover>
           </div>
           <div class="grid-item">
@@ -82,7 +94,7 @@
             </ion-item>
 
             <ion-popover arrow="false" trigger="time-date-button">
-              <ion-datetime presentation="time-date" id="time-date-datetime" value="2022-03-15T00:43:00"></ion-datetime>
+              <ion-datetime locale="en-US" presentation="time-date" id="time-date-datetime" value="2022-03-15T00:43:00"></ion-datetime>
             </ion-popover>
           </div>
           <div class="grid-item">
@@ -94,7 +106,7 @@
             </ion-item>
 
             <ion-popover arrow="false" trigger="month-button">
-              <ion-datetime presentation="month" id="month-datetime" value="2022-03-15T00:43:00"></ion-datetime>
+              <ion-datetime locale="en-US" presentation="month" id="month-datetime" value="2022-03-15T00:43:00"></ion-datetime>
             </ion-popover>
           </div>
           <div class="grid-item">
@@ -106,7 +118,7 @@
             </ion-item>
 
             <ion-popover arrow="false" trigger="month-year-button">
-              <ion-datetime presentation="month-year" id="month-year-datetime" value="2022-03-15T00:43:00"></ion-datetime>
+              <ion-datetime locale="en-US" presentation="month-year" id="month-year-datetime" value="2022-03-15T00:43:00"></ion-datetime>
             </ion-popover>
           </div>
           <div class="grid-item">
@@ -118,7 +130,7 @@
             </ion-item>
 
             <ion-popover arrow="false" trigger="year-button">
-              <ion-datetime presentation="year" id="year-datetime" value="2022-03-15T00:43:00"></ion-datetime>
+              <ion-datetime locale="en-US" presentation="year" id="year-datetime" value="2022-03-15T00:43:00"></ion-datetime>
             </ion-popover>
           </div>
         </div>
