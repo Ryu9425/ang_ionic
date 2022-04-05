@@ -88,6 +88,13 @@ export class DatetimeButton implements ComponentInterface {
       return;
     }
 
+    /**
+     * When clicking the date button,
+     * we need to make sure that only a date
+     * picker is displayed. For presentation styles
+     * that display content other than a date picker,
+     * we need to update the presentation style.
+     */
     switch(datetimePresentation) {
       case 'date-time':
       case 'time-date':
@@ -105,6 +112,13 @@ export class DatetimeButton implements ComponentInterface {
       return;
     }
 
+    /**
+     * When clicking the time button,
+     * we need to make sure that only a time
+     * picker is displayed. For presentation styles
+     * that display content other than a time picker,
+     * we need to update the presentation style.
+     */
     switch(datetimePresentation) {
       case 'date-time':
       case 'time-date':
