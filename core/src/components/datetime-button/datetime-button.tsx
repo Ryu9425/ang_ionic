@@ -82,23 +82,37 @@ export class DatetimeButton implements ComponentInterface {
   };
 
   private handleDateClick = () => {
-    const { datetimeEl } = this;
+    const { datetimeEl, datetimePresentation } = this;
 
     if (!datetimeEl) {
       return;
     }
 
-    datetimeEl.presentation = 'date';
+    switch(datetimePresentation) {
+      case 'date-time':
+      case 'time-date':
+        datetimeEl.presentation = 'date';
+        break;
+      default:
+        break;
+    }
   };
 
   private handleTimeClick = () => {
-    const { datetimeEl } = this;
+    const { datetimeEl, datetimePresentation } = this;
 
     if (!datetimeEl) {
       return;
     }
 
-    datetimeEl.presentation = 'time';
+    switch(datetimePresentation) {
+      case 'date-time':
+      case 'time-date':
+        datetimeEl.presentation = 'time';
+        break;
+      default:
+        break;
+    }
   };
 
   render() {
