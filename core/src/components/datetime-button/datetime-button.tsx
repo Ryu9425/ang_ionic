@@ -3,7 +3,7 @@ import { Component, Host, Prop, State, h } from '@stencil/core';
 import { componentOnReady } from '@utils/helpers';
 import { printIonError } from '@utils/logging';
 
-import type { Color } from '../../interface';
+import type { Color, DatetimePresentation } from '../../interface';
 import { getFormattedTime, getMonthDayAndYear } from '../datetime/utils/format';
 import { is24Hour } from '../datetime/utils/helpers';
 import { parseDate } from '../datetime/utils/parse';
@@ -22,6 +22,7 @@ import { parseDate } from '../datetime/utils/parse';
 export class DatetimeButton implements ComponentInterface {
   private datetimeEl: HTMLIonDatetimeElement | null = null;
 
+  @State() datetimePresentation?: DatetimePresentation;
   @State() dateText?: string;
   @State() timeText?: string;
 
@@ -61,6 +62,7 @@ export class DatetimeButton implements ComponentInterface {
     componentOnReady(datetimeEl, () => {
       this.setDateTimeText();
       datetimeEl.addEventListener('ionChange', this.setDateTimeText);
+      this.datetimePresentation = datetimeEl.presentation;
     });
   }
 
@@ -100,21 +102,23 @@ export class DatetimeButton implements ComponentInterface {
   };
 
   render() {
-    const { dateText, timeText } = this;
+    const { dateText, timeText, datetimePresentation } = this;
+    const showDateTarget = !datetimePresentation || ['date-time', 'time-date', 'date', 'month', 'year', 'month-year'].includes(datetimePresentation);
+    const showTimeTarget = !datetimePresentation || ['date-time', 'time-date', 'time'].includes(datetimePresentation);
 
     return (
       <Host>
-        <div class="date-target-container" aria-haspopup="dialog" onClick={() => this.handleDateClick()}>
+        { showDateTarget && <div class="date-target-container" aria-haspopup="dialog" onClick={() => this.handleDateClick()}>
           <slot name="date-target">
             <button>{dateText}</button>
           </slot>
-        </div>
+        </div> }
 
-        <div class="time-target-container" aria-haspopup="dialog" onClick={() => this.handleTimeClick()}>
+        { showTimeTarget && <div class="time-target-container" aria-haspopup="dialog" onClick={() => this.handleTimeClick()}>
           <slot name="time-target">
             <button>{timeText}</button>
           </slot>
-        </div>
+        </div> }
       </Host>
     );
   }

@@ -40,11 +40,37 @@
 
             <ion-item>
               <ion-label>Start Date</ion-label>
-              <ion-datetime-button slot="end" id="my-datetime-button" datetime="my-datetime"></ion-datetime-button>
+              <ion-datetime-button slot="end" id="default-button" datetime="default-datetime"></ion-datetime-button>
             </ion-item>
 
-            <ion-popover trigger="my-datetime-button">
-              <ion-datetime id="my-datetime" hour-cycle="h12" value="2022-03-15T00:43:00"></ion-datetime>
+            <ion-popover arrow="false" trigger="default-button">
+              <ion-datetime id="default-datetime" value="2022-03-15T00:43:00"></ion-datetime>
+            </ion-popover>
+          </div>
+
+          <div class="grid-item">
+            <h2>Date Only</h2>
+
+            <ion-item>
+              <ion-label>Start Date</ion-label>
+              <ion-datetime-button slot="end" id="date-button" datetime="date-datetime"></ion-datetime-button>
+            </ion-item>
+
+            <ion-popover arrow="false" trigger="date-button">
+              <ion-datetime presentation="date" id="date-datetime" value="2022-03-15T00:43:00"></ion-datetime>
+            </ion-popover>
+          </div>
+
+          <div class="grid-item">
+            <h2>Time Only</h2>
+
+            <ion-item>
+              <ion-label>Start Time</ion-label>
+              <ion-datetime-button slot="end" id="time-button" datetime="time-datetime"></ion-datetime-button>
+            </ion-item>
+
+            <ion-popover arrow="false" trigger="time-button">
+              <ion-datetime presentation="time" id="time-datetime" value="2022-03-15T00:43:00"></ion-datetime>
             </ion-popover>
           </div>
         </div>
