@@ -159,15 +159,15 @@ export class DatetimeButton implements ComponentInterface {
 
     return (
       <Host>
-        { showDateTarget && <div class="date-target-container" aria-haspopup="dialog" onClick={() => this.handleDateClick()}>
+        { showDateTarget && <div class="date-target-container" onClick={() => this.handleDateClick()}>
           <slot name="date-target">
-            <button>{dateText}</button>
+            <button aria-expanded="false">{dateText}</button>
           </slot>
         </div> }
 
-        { showTimeTarget && <div class="time-target-container" aria-haspopup="dialog" onClick={() => this.handleTimeClick()}>
+        { showTimeTarget && <div class="time-target-container" onClick={() => this.handleTimeClick()}>
           <slot name="time-target">
-            <button>{timeText}</button>
+            <button aria-expanded="false">{timeText}</button>
           </slot>
         </div> }
       </Host>
