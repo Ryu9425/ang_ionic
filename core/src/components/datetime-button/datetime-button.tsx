@@ -4,7 +4,7 @@ import { componentOnReady } from '@utils/helpers';
 import { printIonError } from '@utils/logging';
 
 import type { Color, DatetimePresentation } from '../../interface';
-import { getFormattedTime, getMonthDayAndYear } from '../datetime/utils/format';
+import { getFormattedTime, getMonthAndYear, getMonthDayAndYear, getLocalizedDateTime } from '../datetime/utils/format';
 import { is24Hour } from '../datetime/utils/helpers';
 import { parseDate } from '../datetime/utils/parse';
 
@@ -60,14 +60,15 @@ export class DatetimeButton implements ComponentInterface {
     }
 
     componentOnReady(datetimeEl, () => {
+      this.datetimePresentation = datetimeEl.presentation;
+
       this.setDateTimeText();
       datetimeEl.addEventListener('ionChange', this.setDateTimeText);
-      this.datetimePresentation = datetimeEl.presentation;
     });
   }
 
   private setDateTimeText = () => {
-    const { datetimeEl } = this;
+    const { datetimeEl, datetimePresentation } = this;
 
     if (!datetimeEl) {
       return;
@@ -77,8 +78,30 @@ export class DatetimeButton implements ComponentInterface {
     const parsedDatetime = parseDate(value);
     const use24Hour = is24Hour(locale, hourCycle);
 
-    this.dateText = getMonthDayAndYear(locale, parsedDatetime);
-    this.timeText = getFormattedTime(parsedDatetime, use24Hour);
+    switch (datetimePresentation) {
+      case 'date-time':
+      case 'time-date':
+        this.dateText = getMonthDayAndYear(locale, parsedDatetime);
+        this.timeText = getFormattedTime(parsedDatetime, use24Hour);
+        break;
+      case 'date':
+        this.dateText = getMonthDayAndYear(locale, parsedDatetime);
+        break;
+      case 'time':
+        this.timeText = getFormattedTime(parsedDatetime, use24Hour);
+        break;
+      case 'month-year':
+        this.dateText = getMonthAndYear(locale, parsedDatetime);
+        break;
+      case 'month':
+        this.dateText = getLocalizedDateTime(locale, parsedDatetime, { month: 'long' });
+        break;
+      case 'year':
+        this.dateText = getLocalizedDateTime(locale, parsedDatetime, { year: 'numeric' });
+        break;
+      default:
+        break;
+    }
   };
 
   private handleDateClick = () => {
@@ -95,7 +118,7 @@ export class DatetimeButton implements ComponentInterface {
      * that display content other than a date picker,
      * we need to update the presentation style.
      */
-    switch(datetimePresentation) {
+    switch (datetimePresentation) {
       case 'date-time':
       case 'time-date':
         datetimeEl.presentation = 'date';
