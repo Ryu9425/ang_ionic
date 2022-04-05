@@ -1,6 +1,6 @@
 import type { ComponentInterface } from '@stencil/core';
 import { Component, Host, Prop, State, h } from '@stencil/core';
-import { componentOnReady, addEventListener } from '@utils/helpers';
+import { componentOnReady, addEventListener, raf } from '@utils/helpers';
 import { printIonError } from '@utils/logging';
 import { createColorClasses } from '@utils/theme';
 
@@ -24,6 +24,7 @@ import { parseDate } from '../datetime/utils/parse';
 export class DatetimeButton implements ComponentInterface {
   private datetimeEl: HTMLIonDatetimeElement | null = null;
   private selectedButton?: 'date' | 'time';
+  private overlayEl: HTMLElement | null = null;
 
   @State() datetimePresentation?: DatetimePresentation;
   @State() dateText?: string;
@@ -69,7 +70,7 @@ export class DatetimeButton implements ComponentInterface {
      * present/dismiss events so that the tapped
      * button can be correctly highlighted/activated.
      */
-    const overlayEl = datetimeEl.closest('ion-modal, ion-popover');
+    const overlayEl = (this.overlayEl = datetimeEl.closest('ion-modal, ion-popover'));
     if (overlayEl) {
       addEventListener(overlayEl, 'willPresent', () => {
         this.datetimeActive = true;
@@ -80,7 +81,8 @@ export class DatetimeButton implements ComponentInterface {
     }
 
     componentOnReady(datetimeEl, () => {
-      this.datetimePresentation = datetimeEl.presentation;
+      datetimeEl.size = 'cover';
+      this.datetimePresentation = datetimeEl.presentation || 'date-time';
 
       this.setDateTimeText();
       addEventListener(datetimeEl, 'ionChange', this.setDateTimeText);
@@ -155,6 +157,8 @@ export class DatetimeButton implements ComponentInterface {
      * the datetime is opened.
      */
     this.selectedButton = 'date';
+
+    this.setOverlaySize();
   };
 
   private handleTimeClick = () => {
@@ -188,6 +192,78 @@ export class DatetimeButton implements ComponentInterface {
      * the datetime is opened.
      */
     this.selectedButton = 'time';
+
+    this.setOverlaySize();
+  };
+
+  /**
+   * If the datetime is presented in an
+   * overlay, the datetime and overlay
+   * should be appropriately size.
+   * These classes provide default sizing values
+   * that developers can customize.
+   */
+  private setOverlaySize = () => {
+    const { overlayEl, datetimeEl } = this;
+
+    if (!overlayEl || !datetimeEl) {
+      return;
+    }
+
+    const { presentation } = datetimeEl;
+
+    /**
+     * All datetime overlays should have
+     * a consistent width and border radius.
+     * This is controlled by the ion-datetime-button-overlay
+     * class which developers can customize globally.
+     */
+    overlayEl.classList.add('ion-datetime-button-overlay');
+
+    /**
+     * Wheel picker styles in datetime always
+     * have a fixed height of 200px. This is
+     * because the buttons/headers are not shown
+     * with the wheel picker by design.
+     */
+    const hasWheelPicker = ['month', 'year', 'month-year', 'time'].includes(presentation);
+    const needsWiderWheel = presentation === 'month-year';
+
+    if (hasWheelPicker) {
+      overlayEl.style.setProperty('--height', `200px`);
+
+      /**
+       * The default sizing for month-year
+       * is too small, so we it to 300px so
+       * the text is not cut off.
+       */
+      if (needsWiderWheel) {
+        overlayEl.style.setProperty('--width', '300px');
+      }
+
+      /**
+       * If we are not using the
+       * wheel picker then we need to automatically
+       * determine the height of the datetime by
+       * looking at scrollHeight. We look at scrollHeight
+       * as it will give us the height of the datetime
+       * even if it overflows outside of the overlay initially.
+       *
+       * We also wait a frame to allow the browser to
+       * unhide the overlay and calculate the size
+       * of the datetime.
+       *
+       * Doing this means developers can control the size
+       * of the overlay by setting the height of
+       * the datetime directly.
+       */
+    } else {
+      overlayEl.style.setProperty('--width', '300px');
+
+      raf(() => {
+        overlayEl.style.setProperty('--height', `${datetimeEl.scrollHeight}px`);
+      });
+    }
   };
 
   render() {
