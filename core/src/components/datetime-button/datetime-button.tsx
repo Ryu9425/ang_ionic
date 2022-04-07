@@ -6,6 +6,7 @@ import { createColorClasses } from '@utils/theme';
 
 import { getIonMode } from '../../global/ionic-global';
 import type { Color, DatetimePresentation } from '../../interface';
+import { getToday } from '../datetime/utils/data';
 import { getFormattedTime, getMonthAndYear, getMonthDayAndYear, getLocalizedDateTime } from '../datetime/utils/format';
 import { is24Hour } from '../datetime/utils/helpers';
 import { parseDate } from '../datetime/utils/parse';
@@ -125,7 +126,12 @@ export class DatetimeButton implements ComponentInterface {
     }
 
     const { value, locale, hourCycle } = datetimeEl;
-    const parsedDatetime = parseDate(value);
+
+    /**
+     * Both ion-datetime and ion-datetime-button default
+     * to today's date and time if no value is set.
+     */
+    const parsedDatetime = parseDate(value || getToday());
     const use24Hour = is24Hour(locale, hourCycle);
 
     switch (datetimePresentation) {
