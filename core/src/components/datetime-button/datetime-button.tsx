@@ -23,12 +23,12 @@ import { parseDate } from '../datetime/utils/parse';
 })
 export class DatetimeButton implements ComponentInterface {
   private datetimeEl: HTMLIonDatetimeElement | null = null;
-  private selectedButton?: 'date' | 'time';
   private overlayEl: HTMLElement | null = null;
 
   @State() datetimePresentation?: DatetimePresentation;
   @State() dateText?: string;
   @State() timeText?: string;
+  @State() selectedButton?: 'date' | 'time';
   @State() datetimeActive = false;
 
   /**
@@ -65,30 +65,55 @@ export class DatetimeButton implements ComponentInterface {
     }
 
     /**
-     * If the datetime is in a modal or
-     * a popover we should listen for the
-     * present/dismiss events so that the tapped
-     * button can be correctly highlighted/activated.
+     * Since the datetime can be used in any context (overlays, accordion, etc)
+     * we track when it is visible to determine when it is active.
+     * This informs which button is highlighted as well as the
+     * aria-expanded state.
      */
-    const overlayEl = (this.overlayEl = datetimeEl.closest('ion-modal, ion-popover'));
-    if (overlayEl) {
-      addEventListener(overlayEl, 'willPresent', () => {
-        this.datetimeActive = true;
-      });
-      addEventListener(overlayEl, 'willDismiss', () => {
-        this.datetimeActive = false;
-      });
-    }
+    const io = new IntersectionObserver((entries: IntersectionObserverEntry[]) => {
+      const ev = entries[0];
+      this.datetimeActive = ev.isIntersecting;
+    }, {
+      threshold: 0.01
+    });
+
+    io.observe(datetimeEl);
 
     componentOnReady(datetimeEl, () => {
       datetimeEl.size = 'cover';
-      this.datetimePresentation = datetimeEl.presentation || 'date-time';
+      const datetimePresentation = this.datetimePresentation = datetimeEl.presentation || 'date-time';
 
       this.setDateTimeText();
       addEventListener(datetimeEl, 'ionChange', this.setDateTimeText);
+
+      /**
+       * Configure the initial selected button
+       * in the event that the datetime is displayed
+       * without clicking one of the datetime buttons.
+       */
+      switch(datetimePresentation) {
+        case 'date-time':
+        case 'date':
+        case 'month-year':
+        case 'month':
+        case 'year':
+          this.selectedButton = 'date';
+          break;
+        case 'time-date':
+        case 'time':
+          this.selectedButton = 'time';
+          break;
+        default:
+          break;
+      }
     });
   }
 
+  /**
+   * Check the value property on the linked
+   * ion-datetime and then format it according
+   * to the locale specified on ion-datetime.
+   */
   private setDateTimeText = () => {
     const { datetimeEl, datetimePresentation } = this;
 
