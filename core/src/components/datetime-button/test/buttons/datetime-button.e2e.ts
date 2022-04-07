@@ -19,8 +19,8 @@ test.describe('datetime-button: opening with custom button', () => {
     await page.goto('/src/components/datetime-button/test/buttons');
     const ionPopoverDidPresent = await page.spyOnEvent('ionPopoverDidPresent');
 
-    const dateButton = await page.locator('#custom-time-button');
-    await dateButton.click();
+    const timeButton = await page.locator('#custom-time-button');
+    await timeButton.click();
 
     await ionPopoverDidPresent.next();
 

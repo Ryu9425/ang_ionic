@@ -7,7 +7,7 @@ test.describe('datetime-button: basic visual tests', () => {
 
     await page.setIonViewport();
 
-    expect(await page.screenshot({ fullPage: true })).toMatchSnapshot(
+    expect(await page.screenshot({ animations: 'disabled', fullPage: true })).toMatchSnapshot(
       `datetime-button-diff-${page.getSnapshotSettings()}.png`
     );
   });
@@ -24,7 +24,7 @@ test.describe('datetime-button: basic visual tests', () => {
 
     await ionPopoverDidPresent.next();
 
-    expect(await page.screenshot({ fullPage: true })).toMatchSnapshot(
+    expect(await page.screenshot({ animations: 'disabled', fullPage: true })).toMatchSnapshot(
       `date-presented-diff-${page.getSnapshotSettings()}.png`
     );
   });
@@ -41,7 +41,7 @@ test.describe('datetime-button: basic visual tests', () => {
 
     await ionPopoverDidPresent.next();
 
-    expect(await page.screenshot({ fullPage: true })).toMatchSnapshot(
+    expect(await page.screenshot({ animations: 'disabled', fullPage: true })).toMatchSnapshot(
       `time-presented-diff-${page.getSnapshotSettings()}.png`
     );
   });
