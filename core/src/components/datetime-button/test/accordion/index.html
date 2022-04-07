@@ -54,19 +54,6 @@
           </ion-accordion>
         </ion-accordion-group>
       </ion-content>
-
-      <script>
-        const datetimeButtons = document.querySelectorAll('ion-datetime-button');
-        const accordionGroup = document.querySelector('ion-accordion-group');
-        datetimeButtons.forEach((el) => {
-          const accordion = el.closest('ion-accordion');
-
-          el.onclick = (ev) => {
-            accordionGroup.value = accordion.value;
-            ev.stopPropagation();
-          };
-        });
-      </script>
     </ion-app>
   </body>
 </html>
