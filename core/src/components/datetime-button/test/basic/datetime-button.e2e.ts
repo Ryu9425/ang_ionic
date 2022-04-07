@@ -7,10 +7,12 @@ test.describe('datetime-button: basic visual tests', () => {
 
     await page.setIonViewport();
 
-    expect(await page.screenshot({ fullPage: true })).toMatchSnapshot(`datetime-button-diff-${page.getSnapshotSettings()}.png`);
+    expect(await page.screenshot({ fullPage: true })).toMatchSnapshot(
+      `datetime-button-diff-${page.getSnapshotSettings()}.png`
+    );
   });
 
-  test.only('should not have any visual regressions when the date is presented', async ({ page }) => {
+  test('should not have any visual regressions when the date is presented', async ({ page }) => {
     await page.goto('/src/components/datetime-button/test/basic');
 
     const ionPopoverDidPresent = await page.spyOnEvent('ionPopoverDidPresent');
@@ -22,19 +24,25 @@ test.describe('datetime-button: basic visual tests', () => {
 
     await ionPopoverDidPresent.next();
 
-    expect(await page.screenshot({ fullPage: true })).toMatchSnapshot(`date-presented-diff-${page.getSnapshotSettings()}.png`);
+    expect(await page.screenshot({ fullPage: true })).toMatchSnapshot(
+      `date-presented-diff-${page.getSnapshotSettings()}.png`
+    );
   });
 
   test('should not have any visual regressions when the time is presented', async ({ page }) => {
     await page.goto('/src/components/datetime-button/test/basic');
+
+    const ionPopoverDidPresent = await page.spyOnEvent('ionPopoverDidPresent');
 
     await page.setIonViewport();
 
     const timeButton = await page.locator('ion-datetime-button#default-button > #time-button');
     await timeButton.click();
 
-    //await page.waitForIonEvent('ionPopoverDidPresent');
+    await ionPopoverDidPresent.next();
 
-    expect(await page.screenshot({ fullPage: true })).toMatchSnapshot(`time-presented-diff-${page.getSnapshotSettings()}.png`);
+    expect(await page.screenshot({ fullPage: true })).toMatchSnapshot(
+      `time-presented-diff-${page.getSnapshotSettings()}.png`
+    );
   });
 });
