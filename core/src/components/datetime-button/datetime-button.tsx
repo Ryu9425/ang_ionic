@@ -70,18 +70,21 @@ export class DatetimeButton implements ComponentInterface {
      * This informs which button is highlighted as well as the
      * aria-expanded state.
      */
-    const io = new IntersectionObserver((entries: IntersectionObserverEntry[]) => {
-      const ev = entries[0];
-      this.datetimeActive = ev.isIntersecting;
-    }, {
-      threshold: 0.01
-    });
+    const io = new IntersectionObserver(
+      (entries: IntersectionObserverEntry[]) => {
+        const ev = entries[0];
+        this.datetimeActive = ev.isIntersecting;
+      },
+      {
+        threshold: 0.01,
+      }
+    );
 
     io.observe(datetimeEl);
 
     componentOnReady(datetimeEl, () => {
       datetimeEl.size = 'cover';
-      const datetimePresentation = this.datetimePresentation = datetimeEl.presentation || 'date-time';
+      const datetimePresentation = (this.datetimePresentation = datetimeEl.presentation || 'date-time');
 
       this.setDateTimeText();
       addEventListener(datetimeEl, 'ionChange', this.setDateTimeText);
@@ -91,7 +94,7 @@ export class DatetimeButton implements ComponentInterface {
        * in the event that the datetime is displayed
        * without clicking one of the datetime buttons.
        */
-      switch(datetimePresentation) {
+      switch (datetimePresentation) {
         case 'date-time':
         case 'date':
         case 'month-year':
