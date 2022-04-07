@@ -31,20 +31,20 @@ export const DatetimeButtonExample: React.FC = () => {
         {/*-- Modal --*/}
         <IonDatetimeButton id="modal-datetime-button" datetime="modal-datetime"></IonDatetimeButton>
         
-        <ion-modal trigger="modal-datetime-button">
+        <IonModal trigger="modal-datetime-button">
           <IonContent>
             <IonDatetime id="modal-datetime"></IonDatetime>
           </IonContent>
-        </ion-modal>
+        </IonModal>
       
         {/*-- Popover --*/}
         <IonDatetimeButton id="popover-datetime-button" datetime="popover-datetime"></IonDatetimeButton>
         
-        <ion-popover trigger="popover-datetime-button">
+        <IonPopover trigger="popover-datetime-button">
           <IonContent>
             <IonDatetime id="popover-datetime"></IonDatetime>
           </IonContent>
-        </ion-popover>
+        </IonPopover>
       
         {/*-- Accordion --*/}
         <IonAccordionGroup ref={accordionGroupRef}>
