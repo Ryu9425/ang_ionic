@@ -13,6 +13,9 @@ type IonicPage = Page & {
   goto: (url: string) => Promise<null | Response>;
   setIonViewport: () => Promise<void>;
   getSnapshotSettings: () => string;
+  spyOnEvent: (eventName: string) => Promise<any>;
+  _e2eEventsIds: number;
+  _e2eEvents: Map<number, any>;
 };
 
 type CustomTestArgs = PlaywrightTestArgs &
@@ -123,7 +126,75 @@ export const test = base.extend<CustomFixtures>({
         height,
       });
     };
+    page._e2eEventsIds = 0;
+    page._e2eEvents = new Map();
+
+    page.spyOnEvent = async (eventName: string) => {
+      const spy = new EventSpy(eventName);
+
+
+      await page.exposeFunction('ionicOnEvent', (id: number, ev: any) => {
+        const context = page._e2eEvents.get(id);
+        if (context) {
+          context.callback(ev);
+        }
+      })
+
+      const eventCallback = (ev: Event) => {
+        spy.push(ev);
+      }
+
+      const id = page._e2eEventsIds++;
+      page._e2eEvents.set(id, {
+        eventName,
+        callback: eventCallback
+      });
+      await page.evaluate(([eventName, id]) => {
+        window.addEventListener(eventName as string, (ev: Event) => {
+          (window as any).ionicOnEvent(id, ev)
+        });
+      }, [eventName, id]);
+
+      return spy;
+    }
 
     await use(page);
   },
 });
+
+class EventSpy {
+  private cursor = 0;
+  private queuedHandler: (() => void)[] = [];
+  public events: Event[] = [];
+
+  constructor(public eventName: string) {}
+
+  get length() {
+    return this.events.length;
+  }
+
+  public next() {
+    const { cursor } = this;
+    this.cursor++;
+
+    const next = this.events[cursor];
+    if (next) {
+      return Promise.resolve(next);
+    } else {
+      let resolve: () => void;
+      const promise = new Promise<void>((r) => (resolve = r));
+      // @ts-ignore
+      this.queuedHandler.push(resolve);
+
+      return promise.then(() => this.events[cursor]);
+    }
+  }
+
+  public push (ev: Event) {
+    this.events.push(ev);
+    const next = this.queuedHandler.shift();
+    if (next) {
+      next();
+    }
+  }
+}
