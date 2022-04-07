@@ -83,6 +83,13 @@ export class DatetimeButton implements ComponentInterface {
 
     io.observe(datetimeEl);
 
+    /**
+     * Get a reference to any modal/popover
+     * the datetime is being used in so we can
+     * correctly size it when it is presented.
+     */
+    this.overlayEl = datetimeEl.closest('ion-modal, ion-popover');
+
     componentOnReady(datetimeEl, () => {
       datetimeEl.size = 'cover';
       const datetimePresentation = (this.datetimePresentation = datetimeEl.presentation || 'date-time');
