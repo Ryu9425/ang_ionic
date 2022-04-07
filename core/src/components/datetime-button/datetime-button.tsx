@@ -284,7 +284,12 @@ export class DatetimeButton implements ComponentInterface {
         {showDateTarget && (
           <div class="date-target-container" onClick={() => this.handleDateClick()}>
             <slot name="date-target">
-              <button id="date-button" aria-expanded="false">
+              {/*
+                The button is added inside of the <slot> so that
+                devs do not create nested interactives if they
+                decide to add in a custom ion-button.
+              */}
+              <button id="date-button" aria-expanded={datetimeActive ? 'true' : 'false'}>
                 {dateText}
               </button>
             </slot>
@@ -294,7 +299,7 @@ export class DatetimeButton implements ComponentInterface {
         {showTimeTarget && (
           <div class="time-target-container" onClick={() => this.handleTimeClick()}>
             <slot name="time-target">
-              <button id="time-button" aria-expanded="false">
+              <button id="time-button" aria-expanded={datetimeActive ? 'true' : 'false'}>
                 {timeText}
               </button>
             </slot>
