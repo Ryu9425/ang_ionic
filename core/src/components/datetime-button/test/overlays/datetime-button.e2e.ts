@@ -13,7 +13,7 @@ test.describe('datetime-button: sizing in overlays with default datetime', () =>
 
     await page.setIonViewport();
 
-    expect(await page.screenshot({ fullPage: true })).toMatchSnapshot(
+    expect(await page.screenshot({ animations: 'disabled', fullPage: true })).toMatchSnapshot(
       `datetime-button-date-popover-sizing-${page.getSnapshotSettings()}.png`
     );
   });
@@ -29,7 +29,7 @@ test.describe('datetime-button: sizing in overlays with default datetime', () =>
 
     await page.setIonViewport();
 
-    expect(await page.screenshot({ fullPage: true })).toMatchSnapshot(
+    expect(await page.screenshot({ animations: 'disabled', fullPage: true })).toMatchSnapshot(
       `datetime-button-time-popover-sizing-${page.getSnapshotSettings()}.png`
     );
   });
@@ -45,7 +45,7 @@ test.describe('datetime-button: sizing in overlays with default datetime', () =>
 
     await page.setIonViewport();
 
-    expect(await page.screenshot({ fullPage: true })).toMatchSnapshot(
+    expect(await page.screenshot({ animations: 'disabled', fullPage: true })).toMatchSnapshot(
       `datetime-button-date-modal-sizing-${page.getSnapshotSettings()}.png`
     );
   });
@@ -61,7 +61,7 @@ test.describe('datetime-button: sizing in overlays with default datetime', () =>
 
     await page.setIonViewport();
 
-    expect(await page.screenshot({ fullPage: true })).toMatchSnapshot(
+    expect(await page.screenshot({ animations: 'disabled', fullPage: true })).toMatchSnapshot(
       `datetime-button-time-modal-sizing-${page.getSnapshotSettings()}.png`
     );
   });
