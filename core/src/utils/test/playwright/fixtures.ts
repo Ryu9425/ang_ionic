@@ -9,11 +9,13 @@ import type {
 } from '@playwright/test';
 import { test as base } from '@playwright/test';
 
-type IonicPage = Page & {
+import { EventSpy, initPageEvents, addE2EListener } from './eventSpy';
+
+export type IonicPage = Page & {
   goto: (url: string) => Promise<null | Response>;
   setIonViewport: () => Promise<void>;
   getSnapshotSettings: () => string;
-  spyOnEvent: (eventName: string) => Promise<any>;
+  spyOnEvent: (eventName: string) => Promise<EventSpy>;
   _e2eEventsIds: number;
   _e2eEvents: Map<number, any>;
 };
@@ -126,75 +128,28 @@ export const test = base.extend<CustomFixtures>({
         height,
       });
     };
-    page._e2eEventsIds = 0;
-    page._e2eEvents = new Map();
 
-    page.spyOnEvent = async (eventName: string) => {
+    /**
+     * Creates a new EventSpy and listens
+     * on the window for an event.
+     * The test will timeout if the event
+     * never fires.
+     *
+     * Usage:
+     * const ionChange = await page.spyOnEvent('ionChange');
+     * ...
+     * await ionChange.next();
+     */
+    page.spyOnEvent = async (eventName: string): Promise<EventSpy> => {
       const spy = new EventSpy(eventName);
 
-
-      await page.exposeFunction('ionicOnEvent', (id: number, ev: any) => {
-        const context = page._e2eEvents.get(id);
-        if (context) {
-          context.callback(ev);
-        }
-      })
-
-      const eventCallback = (ev: Event) => {
-        spy.push(ev);
-      }
-
-      const id = page._e2eEventsIds++;
-      page._e2eEvents.set(id, {
-        eventName,
-        callback: eventCallback
-      });
-      await page.evaluate(([eventName, id]) => {
-        window.addEventListener(eventName as string, (ev: Event) => {
-          (window as any).ionicOnEvent(id, ev)
-        });
-      }, [eventName, id]);
+      await addE2EListener(page, eventName, (ev: Event) => spy.push(ev));
 
       return spy;
-    }
+    };
+
+    initPageEvents(page);
 
     await use(page);
   },
 });
-
-class EventSpy {
-  private cursor = 0;
-  private queuedHandler: (() => void)[] = [];
-  public events: Event[] = [];
-
-  constructor(public eventName: string) {}
-
-  get length() {
-    return this.events.length;
-  }
-
-  public next() {
-    const { cursor } = this;
-    this.cursor++;
-
-    const next = this.events[cursor];
-    if (next) {
-      return Promise.resolve(next);
-    } else {
-      let resolve: () => void;
-      const promise = new Promise<void>((r) => (resolve = r));
-      // @ts-ignore
-      this.queuedHandler.push(resolve);
-
-      return promise.then(() => this.events[cursor]);
-    }
-  }
-
-  public push (ev: Event) {
-    this.events.push(ev);
-    const next = this.queuedHandler.shift();
-    if (next) {
-      next();
-    }
-  }
-}
