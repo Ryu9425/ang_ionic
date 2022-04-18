@@ -960,9 +960,7 @@ export class Datetime implements ComponentInterface {
         return;
       }
 
-      requestAnimationFrame(() => {
-        this.initializeListeners();
-      });
+      this.initializeListeners();
     };
     const visibleIO = new IntersectionObserver(visibleCallback, { threshold: 0.01 });
 
