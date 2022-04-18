@@ -256,7 +256,7 @@
       </ion-header>
       <ion-content class="ion-padding">
         <div class="grid">
-          <div class="grid-item">
+          <!--<div class="grid-item">
             <h2>Inline</h2>
             <ion-datetime value="2020-03-14T14:23:00.000Z" id="inline-datetime"></ion-datetime>
           </div>
@@ -267,14 +267,14 @@
             <ion-popover class="datetime-popover" id="default-popover">
               <ion-datetime></ion-datetime>
             </ion-popover>
-          </div>
+          </div>-->
 
           <div class="grid-item">
             <h2>Modal</h2>
             <ion-button onclick="presentModal()">Present Modal</ion-button>
           </div>
 
-          <div class="grid-item">
+          <!--<div class="grid-item">
             <h2>Inline - Custom</h2>
             <ion-datetime show-default-buttons="true" color="danger" id="custom-datetime" show-clear-button="true">
               <span slot="title">Select Date</span>
@@ -307,7 +307,7 @@
                 </ion-buttons>
               </ion-datetime>
             </ion-modal>
-          </div>
+          </div>-->
         </div>
       </ion-content>
       <script>
@@ -389,7 +389,7 @@
           // create component to open
           const element = document.createElement('div');
           element.innerHTML = `
-            <ion-datetime show-default-buttons="true" color="danger">
+            <ion-datetime presentation="month-year" show-default-buttons="true" color="danger">
               <span slot="title">Select Date</span>
             </ion-datetime>
           `;

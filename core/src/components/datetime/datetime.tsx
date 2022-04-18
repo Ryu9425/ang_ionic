@@ -942,24 +942,26 @@ export class Datetime implements ComponentInterface {
      * visible if used inside of a modal or a popover otherwise the scrollable
      * areas will not have the correct values snapped into place.
      */
-    const visibleCallback = (entries: IntersectionObserverEntry[]) => {
-      const ev = entries[0];
-      if (!ev.isIntersecting) {
+    const visibleCallback = () => {
+      /**
+       * isIntersecting is only true after animations
+       * have been completed in WebKit. This means
+       * that any listeners that control scrolling
+       * will be activated after the modal/popover
+       * animations completes, resulting in a delay.
+       * We should not check `entries[0].isIntersecting`.
+
+       * Instead, we check the element bounding box.
+       * If the width/height are both greater
+       * than zero then the element is not hidden.
+       */
+      const bbox = this.el.getBoundingClientRect();
+      if (bbox.width === 0 && bbox.height === 0) {
         return;
       }
 
-      this.initializeListeners();
-
-      /**
-       * TODO: Datetime needs a frame to ensure that it
-       * can properly scroll contents into view. As a result
-       * we hide the scrollable content until after that frame
-       * so users do not see the content quickly shifting. The downside
-       * is that the content will pop into view a frame after. Maybe there
-       * is a better way to handle this?
-       */
-      writeTask(() => {
-        this.el.classList.add('datetime-ready');
+      requestAnimationFrame(() => {
+        this.initializeListeners();
       });
     };
     const visibleIO = new IntersectionObserver(visibleCallback, { threshold: 0.01 });
@@ -979,17 +981,12 @@ export class Datetime implements ComponentInterface {
      * the scroll areas have scroll widths/heights of 0px, so any snapping
      * we did originally has been lost.
      */
-    const hiddenCallback = (entries: IntersectionObserverEntry[]) => {
-      const ev = entries[0];
-      if (ev.isIntersecting) {
+    const hiddenCallback = () => {
+      const bbox = this.el.getBoundingClientRect();
+      if (bbox.width !== 0 || bbox.height !== 0) {
         return;
       }
-
       this.destroyInteractionListeners();
-
-      writeTask(() => {
-        this.el.classList.remove('datetime-ready');
-      });
     };
     const hiddenIO = new IntersectionObserver(hiddenCallback, { threshold: 0 });
     raf(() => hiddenIO?.observe(this.el));
