@@ -41,7 +41,7 @@
    * otherwise the fade will appear
    * underneath the picker.
    */
-  z-index: 1;
+  transform: translateZ(0);
 
   pointer-events: none;
 }
