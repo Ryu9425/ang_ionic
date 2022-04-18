@@ -82,10 +82,22 @@ export class PickerColumnInternal implements ComponentInterface {
    * height of 0px.
    */
   componentWillLoad() {
-    const visibleCallback = (entries: IntersectionObserverEntry[]) => {
-      const ev = entries[0];
+    const visibleCallback = () => {
 
-      if (ev.isIntersecting) {
+      /**
+       * isIntersecting is only true after animations
+       * have been completed in WebKit. This means
+       * that any listeners that control scrolling
+       * will be activated after the modal/popover
+       * animations completes, resulting in a delay.
+       * We should not check `entries[0].isIntersecting`.
+
+       * Instead, we check the element bounding box.
+       * If the width/height are both greater
+       * than zero then the element is not hidden.
+       */
+      const bbox = this.el.getBoundingClientRect();
+      if (bbox.width > 0 && bbox.height > 0) {
         this.isColumnVisible = true;
         /**
          * Because this initial call to scrollActiveItemIntoView has to fire before
