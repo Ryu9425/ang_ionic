@@ -196,7 +196,7 @@ export class Modal implements ComponentInterface, OverlayInterface {
    * Note: `isOpen` will not automatically be set back to `false` when
    * the modal dismisses. You will need to do that in your code.
    */
-  @Prop() isOpen = false;
+  @Prop({ mutable: true }) isOpen = false;
   @Watch('isOpen')
   onIsOpenChange(newValue: boolean, oldValue: boolean) {
     if (newValue === true && oldValue === false) {
@@ -656,6 +656,8 @@ export class Modal implements ComponentInterface, OverlayInterface {
       }
 
       enteringAnimation.forEach((ani) => ani.destroy());
+
+      this.isOpen = false;
     }
 
     this.currentTransition = undefined;
